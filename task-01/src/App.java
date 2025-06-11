@@ -13,14 +13,14 @@ public class App {
 
         // 2
         System.out.println("Calculate expressions:");
-        double result1 = (46 + 10) * (10 / 3); 
+        double result1 = (46 + 10) * ((double)10 / 3); 
         int result2 = 29 * 4 * -15;
         System.out.println(result1);
         System.out.println(result2);
 
         // 3
         System.out.println("Calculate numbers:");
-        int number = 10500;
+        double number = 10500;
         double result3 = (number / 10) / 10;
         System.out.println(result3);
 
