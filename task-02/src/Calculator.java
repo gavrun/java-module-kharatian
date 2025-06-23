@@ -39,18 +39,18 @@ public class Calculator {
 	}
 
 	// Division
-	public int divide(int a, int b) {
+	public double divide(int a, int b) {
 		if (b == 0) {
 			throw new ArithmeticException("Cannot use zero");
 		}
-		return a / b;
+		return (double) a / b;
 	}
 
-	public long divide(long a, long b) {
+	public double divide(long a, long b) {
 		if (b == 0L) {
 			throw new ArithmeticException("Cannot use zero");
 		}
-		return a / b;
+		return (double) a / b;
 	}
 
 	public double divide(double a, double b) {
