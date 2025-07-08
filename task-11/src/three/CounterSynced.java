@@ -1,4 +1,4 @@
-package two;
+package three;
 
 public class CounterSynced implements Counter {
 	

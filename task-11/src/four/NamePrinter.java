@@ -1,4 +1,4 @@
-package three;
+package four;
 
 public class NamePrinter implements Runnable {
 
@@ -62,7 +62,7 @@ public class NamePrinter implements Runnable {
 				LOCK.notifyAll();
 			}
 			
-			// Delay
+			// Delay (for demonstration only)
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ei) {

@@ -1,4 +1,4 @@
-package three;
+package four;
 
 public class NamePrinterBad implements Runnable {
 	

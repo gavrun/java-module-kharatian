@@ -1,50 +1,47 @@
 package two;
 
+import one.NumberPrinter;
+
 public class App {
 
-	private static final int THREAD_COUNT = 100;
-    private static final int INCREMENTS_PER_THREAD = 1000;
-    
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		runTest("Naive (not synchronized)", new CounterNaive());
-		
-        runTest("Synchronized", new CounterSynced());
-        
-        runTest("AtomicInteger", new CounterAtomic());
-	}
-	
-	// Test logic
-	private static void runTest(String label, Counter counter) {
+		final int THREAD_COUNT = 10;
 		Thread[] threads = new Thread[THREAD_COUNT];
 		
+		// Thread lifecycle: NEW, RUNNABLE, .., TERMINATED
+		
+		// Create threads and print initial state
 		for (int i = 0; i < THREAD_COUNT; i++) {
-			threads[i] = new Thread( () -> {
-				for (int j = 0; j < INCREMENTS_PER_THREAD; j++) {
-					counter.increment();
-				}
-			});
+			threads[i] = new Thread(new NumberPrinter(i));
+			
+			System.out.println("Thread-" + i + " state BEFORE start: " + threads[i].getState());
 		}
 		
-		long start = System.nanoTime();
-		
-		for (Thread thread : threads) {
-			thread.start();
+		// Start threads and immediately print state
+		for (int i = 0; i < THREAD_COUNT; i++) {
+			threads[i].start();
+			
+			System.out.println("Thread-" + i + " state AFTER start: " + threads[i].getState());
 		}
 		
+		// Wait for all threads to finish
 		for (Thread thread : threads) {
 			try {
-				thread.join();
+				thread.join(); // main finishes earlier
 			} catch (InterruptedException ei) {
 				// TODO: handle exception
 				Thread.currentThread().interrupt();
 			}
 		}
 		
-		long end = System.nanoTime();
+		// Print final state
+		for (int i = 0; i < THREAD_COUNT; i++) {
+			
+			System.out.println("Thread-" + i + " state AFTER join: " + threads[i].getState());
+		}
 		
-		System.out.println(label + " method final count: " + counter.getCount() + "\n  Execution time: " + (end - start) + " ns");
 	}
 
 }

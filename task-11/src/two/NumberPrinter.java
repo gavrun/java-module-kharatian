@@ -1,4 +1,4 @@
-package one;
+package two;
 
 public class NumberPrinter implements Runnable {
 	
@@ -17,6 +17,14 @@ public class NumberPrinter implements Runnable {
 		// TODO Auto-generated method stub
 		for (int i = 0; i < NUM_COUNT; i++) {
 			System.out.println("Thread-" + id + ": " + i);
+			
+			// Optional delay to make RUNNABLE state observable
+//			try {
+//				Thread.sleep(1);
+//			} catch (InterruptedException ei) {
+//				// TODO: handle exception
+//				Thread.currentThread().interrupt();
+//			}
 		}
 	}
 

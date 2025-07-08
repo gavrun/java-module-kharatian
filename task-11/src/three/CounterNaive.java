@@ -1,4 +1,4 @@
-package two;
+package three;
 
 public class CounterNaive implements Counter {
 

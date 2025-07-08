@@ -1,36 +1,63 @@
 package three;
 
+import java.util.concurrent.CountDownLatch;
+
 public class App {
-	
+
+	private static final int THREAD_COUNT = 100;
+    private static final int INCREMENTS_PER_THREAD = 1000;
+    
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
-//		Thread alpha = new Thread(new NamePrinterBad("Alpha"));
-//        Thread beta = new Thread(new NamePrinterBad("Beta"));
 
-//        alpha.start();
-//        beta.start();
+		runTest("Naive (not synchronized)", new CounterNaive());
 		
-		System.out.println("Main begin");
+        runTest("Synchronized", new CounterSynced());
+        
+        runTest("AtomicInteger", new CounterAtomic());
+	}
+	
+	// Test logic
+	private static void runTest(String label, Counter counter) {
+		Thread[] threads = new Thread[THREAD_COUNT];
 		
-		// Shared monitor
-		NamePrinter.startWith("Beta");
+		// Synchronization aid
+		CountDownLatch latch = new CountDownLatch(THREAD_COUNT);
 		
-		Thread thread1 = new Thread(new NamePrinter("Alpha", "Beta"));
-		Thread thread2 = new Thread(new NamePrinter("Beta", "Alpha"));
+		long start = System.nanoTime();
 		
-		thread1.start();
-		thread2.start();
-		
-		try {
-			thread1.join();
-			thread2.join();
-		} catch (InterruptedException ei) {
-			// TODO: handle exception
-			Thread.currentThread().interrupt();
+		for (int i = 0; i < THREAD_COUNT; i++) {
+			threads[i] = new Thread( () -> {
+				for (int j = 0; j < INCREMENTS_PER_THREAD; j++) {
+					counter.increment();
+				}
+				latch.countDown(); // signal that this thread is done
+			});
+			threads[i].start();
 		}
 		
-		System.out.println("Main end");
+//		for (Thread thread : threads) {
+//			thread.start();
+//		}
+		
+//		for (Thread thread : threads) {
+//			try {
+//				thread.join();
+//			} catch (InterruptedException ei) {
+//				// TODO: handle exception
+//				Thread.currentThread().interrupt();
+//			}
+//		}
+		
+		try {
+            latch.await(); // wait for all threads to complete
+        } catch (InterruptedException ei) {
+            Thread.currentThread().interrupt();
+        }
+		
+		long end = System.nanoTime();
+		
+		System.out.println(label + " method final count: " + counter.getCount() + "\n  Execution time: " + (end - start) + " ns");
 	}
 
 }
